@@ -12,7 +12,11 @@ use Illuminate\Http\Request;
 class SearchController extends Controller
 {
     /**
-     * Handle the incoming request.
+     * Perform search from system default's search engine.
+     *
+     * @param Request $request
+     * @param SearchEngine $engine
+     * @return JsonResponse
      */
     public function fromSingleton(Request $request, SearchEngine $engine): JsonResponse
     {
@@ -26,6 +30,12 @@ class SearchController extends Controller
         ]);
     }
 
+    /**
+     * Perform search using the factory pattern. This is still based on the system default search engine.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function fromFactory(Request $request): JsonResponse
     {
         $request->validate([
@@ -41,6 +51,12 @@ class SearchController extends Controller
         ]);
     }
 
+    /**
+     * Perform search using the factory pattern. This is based on the user's search engine preference.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
     public function fromFactoryUser(Request $request): JsonResponse
     {
         $request->validate([

@@ -28,6 +28,10 @@ class OpenAI implements LargeLanguageModel
                 'temperature' => $temperature,
             ]);
 
+        if ($response->failed()) {
+            $response->throw();
+        }
+
         return $response->json(); // @phpstan-ignore-line
     }
 
