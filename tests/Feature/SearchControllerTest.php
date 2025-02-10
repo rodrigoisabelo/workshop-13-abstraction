@@ -79,3 +79,22 @@ it('can search from factory user', function (): void {
         'engine' => DuckDuckGo::class,
     ]);
 });
+
+it('can search from facade', function (): void {
+    authenticate();
+
+    $query = "What is Singleton";
+    $fakeSearchResults = makeFakeSearchResuls();
+
+    Http::fake([
+        config('services.serpapi.base_url') . '/*' => Http::response($fakeSearchResults, 200),
+    ]);
+
+    $response = $this->getJson(route('api.search.facade', ['query' => $query]));
+
+    $response->assertOk();
+
+    expect($response->json())->toBe([
+        'data' => $fakeSearchResults,
+    ]);
+});

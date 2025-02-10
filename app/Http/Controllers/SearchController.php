@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Contracts\SearchEngine;
+use App\Facades\SearchEngine as SearchEngineFacade;
 use App\Support\SearchEngine\Factory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -69,6 +70,27 @@ class SearchController extends Controller
         return response()->json([
             'data' => $engine->search($request->string('query')->toString()),
             'engine' => get_class($engine),
+        ]);
+    }
+
+    /**
+     * Perform search using the facade pattern.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function fromFacade(Request $request): JsonResponse
+    {
+        $request->validate([
+            'query' => 'required|string',
+        ]);
+
+        $query = $request->string('query')->toString();
+
+        $response = SearchEngineFacade::search($query);
+
+        return response()->json([
+            'data' => $response,
         ]);
     }
 }

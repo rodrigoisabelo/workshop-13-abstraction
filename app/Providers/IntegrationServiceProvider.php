@@ -6,6 +6,7 @@ namespace App\Providers;
 
 use App\Contracts\LargeLanguageModel;
 use App\Contracts\SearchEngine;
+use App\Facades\SearchEngine as SearchEngineFacade;
 use App\Managers\LargeLanguageModelManager;
 use App\Managers\SearchEngineManager;
 use Illuminate\Contracts\Container\Container;
@@ -30,6 +31,11 @@ class IntegrationServiceProvider extends ServiceProvider
          * without creating a new instance of the manager.
          */
         $this->app->singleton(SearchEngine::class, fn (Container $app) => $app->make(SearchEngineManager::class)->driver());
+
+        /**
+         * We will register the Search Engine Facade to allow easy access to the search engine instance.
+         */
+        $this->app->alias(SearchEngine::class, SearchEngineFacade::class);
 
         /**
          * We will register the Large Language Model Manager to have only 1 manager instance across the application.
